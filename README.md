@@ -9,19 +9,36 @@ Components:
 * WINE - to run Windows executables on linux
 * blueiris.exe - official Windows BlueIris
 
-```
-docker run -d \
-  --name="blueiris" \
-  --privileged \
-  --init \
-  --restart=always \
-  -e TZ=America/Los_Angeles \
-  -p 8080:8080 \
-  -p 5900:5900 \
-  -p 81:1025 \
-  -v /path/to/data:/home/wineuser/prefix:rw \
-  --log-opt max-size=5m --log-opt max-file=2 \
-  jshridha/blueiris
+``` D
+version: "3.6"
+services:
+  blueiris:
+    container_name: blueiris
+    image: packetworks/blueiris
+    restart: unless-stopped
+    privileged: true # Necessary for running the BlueIris install the first time evidently.
+#    init: true
+    devices:
+      - /dev/dri:/dev/dri
+    environment:
+      - LIBVA_DRIVER_NAME=iHD
+    ports:
+      - 8080:8080
+      - 5900:5900 # VNC Port
+      - 81:1025 # WebUI Port
+    volumes:
+      - blueiris:/root/prefix32:rw
+      - /etc/timezone:/etc/timezone:ro
+      - /usr/share/zoneinfo/America/New_York:/etc/localtime:ro
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK=0077
+      - TZ=America/New_York
+    logging:
+      options:
+        max-size: "10M"
+        max-file: "10"
   ```
 * **NOTES:**
 
