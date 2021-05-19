@@ -61,7 +61,7 @@ RUN apt update && \
     apt install -y vainfo vdpauinfo && \
     apt install -y libva-drm2 libva2 i965-va-driver vainfo intel-media-va-driver && \
     apt install -y xserver-xorg-video-dummy x11-apps && \
-    apt install -y winehq-staging=5.11~focal wine-staging=5.11~focal wine-staging-i386=5.11~focal wine-staging-amd64=5.11~focal && \
+    apt install -y winehq-staging wine-staging wine-staging-i386 wine-staging-amd64 && \
     rm -rf /var/lib/apt/lists/*
 
 RUN usermod -aG video wineuser && usermod -aG render wineuser
