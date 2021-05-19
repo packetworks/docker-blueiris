@@ -1,21 +1,21 @@
 #!/bin/bash
 
-BLUEIRIS_EXE="/root/prefix32/drive_c/Program Files/Blue Iris 5/BlueIris.exe"
-PREFIX_DIR="/root/prefix32"
-INSTALL_EXE="/root/blueiris.exe"
+PREFIX_DIR=${WINEPREFIX}
+BLUEIRIS_EXE="$PREFIX_DIR/drive_c/Program Files/Blue Iris ${BLUEIRIS_VERSION}/BlueIris.exe"
+BLUEIRIS_INSTALL_PATH="$PREFIX_DIR/drive_c/Program Files/Blue Iris ${BLUEIRIS_VERSION}"
+WINE_PATH=${WINE_PATH:-/usr/bin/wine}
 
 if [ ! -d "$PREFIX_DIR/drive_c" ]; then
-    mv /root/prefix32_original/* /root/prefix32
+  winetricks win10
 fi
 
-chown -R root:root /root/prefix32
 
 if [ ! -e "$BLUEIRIS_EXE" ] ; then
-    if [ ! -e "$INSTALL_EXE" ] ; then
-        wget http://blueirissoftware.com/blueiris.exe
+    wine "/home/wineuser/blueiris_$BLUEIRIS_VERSION.exe"
+    if [ "$BLUEIRIS_VERSION" == "5" ]; then
+       unzip -o "${BLUEIRIS_INSTALL_PATH}/ui3.zip" -d "${BLUEIRIS_INSTALL_PATH}/www/"
     fi
-    wine blueiris.exe
-    rm blueiris.exe
 fi
 
-wine "$BLUEIRIS_EXE"
+wine reg delete "HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\BlueIris" /f | true
+$WINE_PATH "${BLUEIRIS_EXE}"
