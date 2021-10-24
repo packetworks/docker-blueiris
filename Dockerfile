@@ -46,6 +46,7 @@ ADD supervisord-normal.conf /etc/supervisor/conf.d/supervisord-normal.conf
 ADD supervisord-service.conf /etc/supervisor/conf.d/supervisord-service.conf
 ADD menu $HOME/menu
 ADD get_latest_ui3.sh $HOME/get_latest_ui3.sh
+ADD prereqs.sh /prereqs.sh
 
 RUN chmod +x $HOME/*.sh && \
     mkdir -p $HOME/.fluxbox && \
